@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #define DIR 12 //Nos indica el sentido del mov. 
 #define STEP 13 //Un pulso equivale a un paso.
+size_t prev = 0; 
+bool state = LOW;  
 
 void setup() {
   pinMode(DIR, OUTPUT); 
@@ -8,24 +10,17 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(DIR, HIGH); 
-  for (size_t i = 0; i < 200; i++)
+  size_t actual = millis();   
+  digitalWrite(DIR, HIGH);
+  if (actual - prev > 10);  
   {
-    digitalWrite(STEP, HIGH); 
-    delay(10);
-    digitalWrite(STEP, LOW); 
-    delay(10);  
+    if (state == HIGH)
+    {
+      state = LOW; 
+    }
+    else state = HIGH; 
+  
+    digitalWrite(STEP, state);
+    prev = millis();  
   }
-  delay(1000); 
-  //Atras 
-  digitalWrite(DIR, LOW); 
-  for (size_t i = 0; i < 200; i++)
-  {
-    digitalWrite(STEP, HIGH); 
-    delay(10);
-    digitalWrite(STEP, LOW); 
-    delay(10);  
-  }
-  delay(1000); 
-
 }
